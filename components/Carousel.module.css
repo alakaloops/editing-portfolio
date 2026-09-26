@@ -1,0 +1,177 @@
+/* Flash Overlay */
+.flashOverlay {
+  position: fixed;
+  inset: 0;
+  background-color: #ffffff;
+  z-index: 9999;
+  pointer-events: none;
+}
+
+/* Hero Carousel Wrapper */
+.carouselWrapper {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+  user-select: none;
+  cursor: grab;
+  padding: 4rem 0;
+  background-color: #050505;
+}
+
+.carouselWrapper:active {
+  cursor: grabbing;
+}
+
+/* Track holding cards in a single row */
+.track {
+  display: flex;
+  gap: 2rem;
+  width: max-content;
+  will-change: transform;
+}
+
+/* Individual Card - Sharp Minimalist Aesthetics */
+.card {
+  flex: 0 0 auto;
+  width: 320px;
+  position: relative;
+  background-color: #000000;
+  border: 1px solid #1a1a1a;
+  border-radius: 0px;
+  overflow: hidden;
+  cursor: pointer;
+  box-shadow: none;
+  transform-origin: center center;
+  will-change: transform, filter;
+}
+
+.imageContainer {
+  position: relative;
+  width: 100%;
+  height: 420px;
+  overflow: hidden;
+  background-color: #111111;
+}
+
+.thumbnail,
+.cardVideo {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 0px;
+  display: block;
+}
+
+/* Content & Minimalist Typography */
+.cardContent {
+  padding: 1.25rem 1rem;
+  background-color: #080808;
+  border-top: 1px solid #141414;
+}
+
+.category {
+  font-family: var(--font-geist-mono, monospace);
+  font-size: 0.65rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.22em;
+  color: #888888;
+  margin-bottom: 0.4rem;
+}
+
+.title {
+  font-family: var(--font-geist-sans, sans-serif);
+  font-size: 1.15rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: #ffffff;
+  margin: 0;
+  text-transform: uppercase;
+}
+
+/* White Placeholder Cards for Future Assets */
+.cardPlaceholder {
+  background-color: #ffffff;
+  border: 1px solid #e5e5e5;
+  color: #000000;
+}
+
+.cardPlaceholder .cardContent {
+  background-color: #ffffff;
+  border-top: 1px solid #eeeeee;
+}
+
+.cardPlaceholder .category {
+  color: #666666;
+}
+
+.cardPlaceholder .title {
+  color: #000000;
+}
+
+.placeholderMedia {
+  width: 100%;
+  height: 420px;
+  background-color: #f7f7f7;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border-bottom: 1px solid #eeeeee;
+}
+
+.placeholderPlus {
+  font-size: 2.5rem;
+  font-weight: 300;
+  color: #000000;
+  line-height: 1;
+  margin-bottom: 0.5rem;
+}
+
+.placeholderLabel {
+  font-family: var(--font-geist-mono, monospace);
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  color: #555555;
+}
+
+/* Play Badge Overlay */
+.playOverlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.playIcon {
+  width: 44px;
+  height: 44px;
+  background: #ffffff;
+  color: #000000;
+  border-radius: 0px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.85rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+}
+
+/* Responsive */
+@media (max-width: 640px) {
+  .card {
+    width: 240px;
+  }
+  .imageContainer,
+  .placeholderMedia {
+    height: 310px;
+  }
+  .title {
+    font-size: 0.95rem;
+  }
+}
