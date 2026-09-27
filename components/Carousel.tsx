@@ -19,68 +19,68 @@ export type MediaItem = {
    ========================================================================= */
 export const mediaItems: MediaItem[] = [
   {
-    id: '1',
-    title: 'Shadow Edit',
-    category: 'Cinematic / Edit',
-    thumbnail: '/thumbnails/edit1.jpg',
-    src: '/videos/edit1.mp4',
-    duration: '0:45',
-  },
-  {
-    id: '2',
-    title: 'Star Rebel Edit',
-    category: 'Motion & Style',
-    thumbnail: '/thumbnails/edit2.jpg',
-    src: '/videos/edit2.mp4',
-    duration: '0:32',
-  },
-  {
-    id: '3',
-    title: 'Skull Red Neon',
-    category: 'VFX / Graphic',
-    thumbnail: '/thumbnails/edit3.jpg',
-    src: '/videos/edit1.mp4',
-    duration: '0:50',
-  },
-  {
-    id: '4',
-    title: 'Skull Monochrome',
-    category: 'Dark Aesthetics',
-    thumbnail: '/thumbnails/edit4.jpg',
-    src: '/videos/edit2.mp4',
-    duration: '1:10',
-  },
-  {
     id: '5',
-    title: 'Future Edit 05',
-    category: 'Add Asset',
+    title: 'Visual Edit 05',
+    category: 'After Effects / VFX',
     thumbnail: '',
-    src: '',
-    isPlaceholder: true,
+    src: '/videos/edit5.mp4',
+    duration: '0:30',
   },
   {
     id: '6',
-    title: 'Future Edit 06',
-    category: 'Add Asset',
+    title: 'Visual Edit 06',
+    category: 'Cinematic Motion',
     thumbnail: '',
-    src: '',
-    isPlaceholder: true,
+    src: '/videos/edit6.mp4',
+    duration: '0:45',
   },
   {
     id: '7',
-    title: 'Future Edit 07',
-    category: 'Add Asset',
+    title: 'Visual Edit 07',
+    category: 'Rhythm & Color',
     thumbnail: '',
-    src: '',
-    isPlaceholder: true,
+    src: '/videos/edit7.mp4',
+    duration: '0:40',
   },
   {
     id: '8',
-    title: 'Future Edit 08',
-    category: 'Add Asset',
+    title: 'Visual Edit 08',
+    category: 'CapCut / Dynamics',
     thumbnail: '',
-    src: '',
-    isPlaceholder: true,
+    src: '/videos/edit8.mp4',
+    duration: '0:35',
+  },
+  {
+    id: '10',
+    title: 'Visual Edit 10',
+    category: 'Visual Composition',
+    thumbnail: '',
+    src: '/videos/edit10.mp4',
+    duration: '0:50',
+  },
+  {
+    id: '11',
+    title: 'Visual Edit 11',
+    category: 'VFX Showcase',
+    thumbnail: '',
+    src: '/videos/edit11.mp4',
+    duration: '1:05',
+  },
+  {
+    id: '12',
+    title: 'Visual Edit 12',
+    category: 'High-Energy Edit',
+    thumbnail: '',
+    src: '/videos/edit12.mp4',
+    duration: '0:25',
+  },
+  {
+    id: '1',
+    title: 'Shadow Edit 01',
+    category: 'Creative Cut',
+    thumbnail: '',
+    src: '/videos/edit1.mp4',
+    duration: '0:45',
   },
 ];
 
@@ -419,11 +419,11 @@ export default function Carousel({ onSelect }: { onSelect: (item: MediaItem) => 
                     {item.src ? (
                       <video
                         ref={(el) => { videoRefs.current[item.id] = el; }}
-                        src={item.src}
-                        poster={item.thumbnail}
+                        src={`${item.src}#t=0.001`}
                         muted
                         loop
                         playsInline
+                        preload="metadata"
                         className={styles.cardVideo}
                       />
                     ) : (

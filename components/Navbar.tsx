@@ -30,8 +30,8 @@ export default function Navbar() {
         </Link>
 
         <nav className="flex items-center gap-6 text-xs uppercase tracking-widest text-zinc-400 font-mono">
-          <Link href="/" className="hover:text-white transition">Work</Link>
-          <Link href="/gallery" className="hover:text-white transition">3D Sphere</Link>
+          <Link href="/" className="hover:text-white transition">ABOUT ME</Link>
+          <Link href="/gallery" className="hover:text-white transition">WORK</Link>
           <button
             onClick={() => setShowContactModal(true)}
             className="px-4 py-2 border border-zinc-800 rounded-full hover:border-red-500 hover:text-white transition bg-zinc-900/50 text-xs font-mono tracking-widest uppercase cursor-pointer"

@@ -16,32 +16,28 @@ export default function GalleryPage() {
   const closePanel = () => setSelected(null);
 
   return (
-    <main className="relative min-h-screen bg-[#070707] text-white flex flex-col justify-between overflow-x-hidden font-sans">
+    <main className="relative min-h-screen bg-black text-white flex flex-col justify-between overflow-x-hidden font-sans">
       {/* Background radial highlight */}
       <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-7xl h-[500px] bg-red-600/5 blur-[120px] pointer-events-none rounded-full" />
 
       {/* Shared Navbar */}
       <Navbar />
 
-      {/* Main Content Container */}
-      <div className="w-full max-w-7xl mx-auto px-6 py-8 z-10 flex-1">
-        {/* 3D Sphere Gallery Section */}
-        <section className="mb-16 border border-zinc-900 rounded-xl overflow-hidden bg-zinc-950/60 shadow-2xl">
-          <div className="p-4 border-b border-zinc-900 flex justify-between items-center bg-black/40">
-            <span className="text-xs font-mono uppercase tracking-widest text-zinc-400">3D Interactive Sphere Gallery</span>
-            <span className="text-xs font-mono text-zinc-500">Drag to Rotate • Click to Open</span>
-          </div>
-          <SphereGallery />
-        </section>
+      {/* Full-Bleed 3D Sphere Gallery Section */}
+      <section className="w-full h-screen relative bg-black overflow-hidden">
+        <SphereGallery />
+      </section>
 
+      {/* Main Content Container */}
+      <div className="w-full max-w-7xl mx-auto px-6 py-16 z-10 flex-1">
         {/* Horizontal Carousel Section */}
         <section>
           <div className="mb-6">
             <span className="inline-block px-3 py-1 bg-red-950/60 border border-red-800/40 text-red-400 text-[10px] uppercase font-mono tracking-widest rounded-full mb-2">
-              Featured Gallery
+              Featured Works
             </span>
             <h2 className="text-2xl md:text-3xl font-bold tracking-tight text-white uppercase">
-              Horizontal Carousel
+              FEATURED WORKS
             </h2>
           </div>
           <Carousel onSelect={handleSelect} />

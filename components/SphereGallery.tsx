@@ -2,6 +2,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import * as THREE from 'three';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+import { gsap } from 'gsap';
 import styles from './SphereGallery.module.css';
 
 export type SphereItem = {
@@ -16,31 +17,31 @@ export type SphereItem = {
 const sphereItems: SphereItem[] = [
   {
     id: '1',
-    title: 'Shadow Edit',
+    title: 'Visual Edit 05',
     type: 'video',
-    thumbnail: '/thumbnails/edit1.jpg',
-    src: '/videos/edit1.mp4',
+    thumbnail: '/thumbnails/edit5.jpg',
+    src: '/videos/edit5.mp4',
   },
   {
     id: '2',
-    title: 'Star Rebel Edit',
+    title: 'Visual Edit 06',
     type: 'video',
-    thumbnail: '/thumbnails/edit2.jpg',
-    src: '/videos/edit2.mp4',
+    thumbnail: '/thumbnails/edit6.jpg',
+    src: '/videos/edit6.mp4',
   },
   {
     id: '3',
-    title: 'Skull Red Neon',
+    title: 'Visual Edit 07',
     type: 'video',
-    thumbnail: '/thumbnails/edit3.jpg',
-    src: '/videos/edit1.mp4',
+    thumbnail: '/thumbnails/edit7.jpg',
+    src: '/videos/edit7.mp4',
   },
   {
     id: '4',
-    title: 'Skull Monochrome',
+    title: 'Visual Edit 08',
     type: 'video',
-    thumbnail: '/thumbnails/edit4.jpg',
-    src: '/videos/edit2.mp4',
+    thumbnail: '/thumbnails/edit8.jpg',
+    src: '/videos/edit8.mp4',
   },
   {
     id: '5',
@@ -72,17 +73,17 @@ const sphereItems: SphereItem[] = [
   },
   {
     id: '9',
-    title: 'Visual Edit 09',
+    title: 'Visual Edit 10',
     type: 'video',
-    thumbnail: '/thumbnails/edit1.jpg',
-    src: '/videos/edit1.mp4',
+    thumbnail: '/thumbnails/edit10.jpg',
+    src: '/videos/edit10.mp4',
   },
   {
     id: '10',
-    title: 'Visual Edit 10',
+    title: 'Visual Edit 11',
     type: 'video',
-    thumbnail: '/thumbnails/edit2.jpg',
-    src: '/videos/edit2.mp4',
+    thumbnail: '/thumbnails/edit11.jpeg',
+    src: '/videos/edit11.mp4',
   },
   {
     id: '11',
@@ -100,17 +101,17 @@ const sphereItems: SphereItem[] = [
   },
   {
     id: '13',
-    title: 'Visual Edit 13',
+    title: 'Visual Edit 12',
     type: 'video',
-    thumbnail: '/thumbnails/edit1.jpg',
-    src: '/videos/edit1.mp4',
+    thumbnail: '/thumbnails/edit12.jpeg',
+    src: '/videos/edit12.mp4',
   },
   {
     id: '14',
-    title: 'Visual Edit 14',
+    title: 'Visual Edit 05',
     type: 'video',
-    thumbnail: '/thumbnails/edit2.jpg',
-    src: '/videos/edit2.mp4',
+    thumbnail: '/thumbnails/edit5.jpg',
+    src: '/videos/edit5.mp4',
   },
   {
     id: '15',
@@ -126,7 +127,92 @@ const sphereItems: SphereItem[] = [
     thumbnail: '/thumbnails/edit4.jpg',
     src: '/thumbnails/edit4.jpg',
   },
+  {
+    id: '17',
+    title: 'Visual Edit 05',
+    type: 'video',
+    thumbnail: '/thumbnails/edit5.jpg',
+    src: '/videos/edit5.mp4',
+  },
+  {
+    id: '18',
+    title: 'Visual Edit 06',
+    type: 'video',
+    thumbnail: '/thumbnails/edit6.jpg',
+    src: '/videos/edit6.mp4',
+  },
+  {
+    id: '19',
+    title: 'Visual Edit 07',
+    type: 'video',
+    thumbnail: '/thumbnails/edit7.jpg',
+    src: '/videos/edit7.mp4',
+  },
+  {
+    id: '20',
+    title: 'Visual Edit 08',
+    type: 'video',
+    thumbnail: '/thumbnails/edit8.jpg',
+    src: '/videos/edit8.mp4',
+  },
+  {
+    id: '21',
+    title: 'Visual Edit 10',
+    type: 'video',
+    thumbnail: '/thumbnails/edit10.jpg',
+    src: '/videos/edit10.mp4',
+  },
+  {
+    id: '22',
+    title: 'Visual Edit 11',
+    type: 'video',
+    thumbnail: '/videos/edit11.mp4',
+    src: '/videos/edit11.mp4',
+  },
+  {
+    id: '23',
+    title: 'Visual Edit 12',
+    type: 'video',
+    thumbnail: '/videos/edit12.mp4',
+    src: '/videos/edit12.mp4',
+  },
 ];
+
+// Helper to extract first frame from video as a Three.js Texture
+function loadVideoFrameTexture(videoUrl: string): THREE.Texture {
+  const canvas = document.createElement('canvas');
+  canvas.width = 440;
+  canvas.height = 600;
+  const ctx = canvas.getContext('2d');
+  const texture = new THREE.CanvasTexture(canvas);
+  texture.colorSpace = THREE.SRGBColorSpace;
+
+  if (typeof window !== 'undefined') {
+    const video = document.createElement('video');
+    video.src = `${videoUrl}#t=0.001`;
+    video.muted = true;
+    video.playsInline = true;
+    video.crossOrigin = 'anonymous';
+    video.preload = 'auto';
+
+    const renderFrame = () => {
+      if (ctx && video.videoWidth > 0 && video.videoHeight > 0) {
+        canvas.width = video.videoWidth;
+        canvas.height = video.videoHeight;
+        ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+        texture.needsUpdate = true;
+      }
+    };
+
+    video.addEventListener('seeked', renderFrame);
+    video.addEventListener('loadeddata', () => {
+      video.currentTime = 0.1;
+      renderFrame();
+    });
+  }
+
+  return texture;
+}
 
 // Fibonacci Sphere Distribution Helper Function
 function fibonacciSphere(count: number, radius: number): THREE.Vector3[] {
@@ -160,7 +246,8 @@ export default function SphereGallery() {
     const camera = new THREE.PerspectiveCamera(55, width / height, 0.1, 1000);
     camera.position.z = 18;
 
-    const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+    const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: false });
+    renderer.setClearColor(0x000000, 1);
     renderer.setSize(width, height);
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
     container.appendChild(renderer.domElement);
@@ -186,24 +273,79 @@ export default function SphereGallery() {
     const planeGeo = new THREE.PlaneGeometry(2.2, 3.0);
 
     sphereItems.forEach((item, index) => {
-      const texture = textureLoader.load(item.thumbnail);
-      texture.colorSpace = THREE.SRGBColorSpace;
-      const mat = new THREE.MeshBasicMaterial({
+      let texture: THREE.Texture;
+      if (item.thumbnail.endsWith('.mp4')) {
+        texture = loadVideoFrameTexture(item.thumbnail);
+      } else {
+        texture = textureLoader.load(item.thumbnail);
+        texture.colorSpace = THREE.SRGBColorSpace;
+      }
+      const textureMat = new THREE.MeshBasicMaterial({
         map: texture,
         side: THREE.DoubleSide,
         transparent: true,
+        opacity: 1,
       });
 
-      const mesh = new THREE.Mesh(planeGeo, mat);
+      const mesh = new THREE.Mesh(planeGeo, textureMat);
       mesh.position.copy(points[index]);
+      mesh.scale.set(1, 1, 1);
       mesh.userData = {
         item,
         originalScale: new THREE.Vector3(1, 1, 1),
         targetScale: new THREE.Vector3(1, 1, 1),
       };
 
+      // Solid white overlay material for individual thumbnail white-flash reveal
+      const whiteMat = new THREE.MeshBasicMaterial({
+        color: 0xffffff,
+        side: THREE.DoubleSide,
+        transparent: true,
+        opacity: 1,
+      });
+
+      const whiteMesh = new THREE.Mesh(planeGeo, whiteMat);
+      whiteMesh.position.set(0, 0, 0.005);
+      mesh.add(whiteMesh);
+
       sphereGroup.add(mesh);
       meshes.push(mesh);
+
+      // Staggered per-item white-flash reveal animation on initial load
+      const tl = gsap.timeline({ delay: index * 0.07 });
+
+      // Quick scale-punch ("flash then settle")
+      tl.to(mesh.userData.targetScale, {
+        x: 1.08,
+        y: 1.08,
+        z: 1.08,
+        duration: 0.15,
+        ease: 'power2.out',
+      });
+
+      // Fade white overlay out to reveal photo/video thumbnail texture underneath
+      tl.to(
+        whiteMat,
+        {
+          opacity: 0,
+          duration: 0.25,
+          ease: 'power2.inOut',
+          onComplete: () => {
+            mesh.remove(whiteMesh);
+            whiteMat.dispose();
+          },
+        },
+        0
+      );
+
+      // Settle scale back to normal
+      tl.to(mesh.userData.targetScale, {
+        x: 1,
+        y: 1,
+        z: 1,
+        duration: 0.2,
+        ease: 'back.out(1.7)',
+      });
     });
 
     // 4. Auto-Drift & Auto-Rotate Variables
@@ -211,6 +353,18 @@ export default function SphereGallery() {
     let driftFactor = 1.0;
     let autoRotateFactor = 1.0;
     const clock = new THREE.Clock();
+
+    // Mouse tracking for subtle parallax cursor-follow tilt
+    let mouseX = 0;
+    let mouseY = 0;
+    let currentTiltX = 0;
+    let currentTiltY = 0;
+
+    const onWindowMouseMove = (e: MouseEvent) => {
+      mouseX = (e.clientX / window.innerWidth) * 2 - 1;
+      mouseY = (e.clientY / window.innerHeight) * 2 - 1;
+    };
+    window.addEventListener('mousemove', onWindowMouseMove);
 
     controls.addEventListener('start', () => {
       isDragging = true;
@@ -325,15 +479,29 @@ export default function SphereGallery() {
       meshes.forEach((mesh) => {
         mesh.lookAt(camera.position);
 
-        // Smooth scale interpolation for hover
+        // Smooth scale interpolation for hover & reveal
         mesh.scale.lerp(mesh.userData.targetScale, 0.1);
       });
 
-      // Idle Auto-Rotate
+      // Subtle Cursor-Follow Tilt (Parallax response layered on top of existing motion)
+      const maxTiltAmount = 0.15;
+      const activeTiltFactor = isDragging ? 0 : autoRotateFactor;
+      const targetTiltX = mouseY * maxTiltAmount * activeTiltFactor;
+      const targetTiltY = mouseX * maxTiltAmount * activeTiltFactor;
+
+      currentTiltX += (targetTiltX - currentTiltX) * 0.05;
+      const deltaTiltY = (targetTiltY - currentTiltY) * 0.05;
+      currentTiltY += deltaTiltY;
+
+      // Apply tilt to rotation.x
+      sphereGroup.rotation.x = currentTiltX;
+
+      // Idle Auto-Rotate & Auto-Drift (UNTOUCHED LOGIC)
       if (!isDragging) {
         sphereGroup.rotation.y += 0.0006 * autoRotateFactor;
+        sphereGroup.rotation.y += deltaTiltY; // Add Y cursor tilt offset
 
-        // Idle Auto-Drift (Lissajous Path)
+        // Idle Auto-Drift (Lissajous Path) - UNTOUCHED
         const t = clock.getElapsedTime();
         const driftRangeX = 1.2;
         const driftRangeY = 0.8;
@@ -349,6 +517,7 @@ export default function SphereGallery() {
     return () => {
       cancelAnimationFrame(animId);
       window.removeEventListener('resize', handleResize);
+      window.removeEventListener('mousemove', onWindowMouseMove);
       domEl.removeEventListener('pointermove', onPointerMove);
       domEl.removeEventListener('pointerdown', onPointerDown);
       domEl.removeEventListener('pointerup', onPointerUp);
