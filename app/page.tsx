@@ -2,7 +2,8 @@
 import React, { useState } from 'react';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
-import Carousel from '@/components/Carousel';
+import SphereGallery from '@/components/SphereGallery';
+import Carousel from "../components/Carousel";
 import type { MediaItem } from '@/components/Carousel';
 
 export default function Home() {
@@ -22,49 +23,9 @@ export default function Home() {
       {/* Shared Navbar */}
       <Navbar />
 
-      {/* About Me Section */}
-      <section id="about" className="max-w-7xl mx-auto px-6 py-12 z-10 w-full">
-        <div className="bg-zinc-950/80 border border-zinc-900 rounded-2xl p-8 md:p-12 shadow-2xl backdrop-blur-sm relative overflow-hidden">
-          {/* Subtle accent line */}
-          <div className="absolute top-0 left-0 w-full h-[2px] bg-gradient-to-r from-red-600 via-red-500 to-transparent" />
-
-          <div className="max-w-3xl">
-            <span className="inline-block px-3.5 py-1 bg-red-950/60 border border-red-800/40 text-red-400 text-[11px] uppercase font-mono tracking-widest rounded-full mb-4 font-semibold">
-              About Me
-            </span>
-
-            <h2 className="text-3xl md:text-5xl font-black tracking-tight text-white uppercase mb-6 leading-tight">
-              IIT Madras Student &amp; <br />
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-red-500 to-red-600">
-                Visual Editor
-              </span>
-            </h2>
-
-            <p className="text-zinc-300 text-base md:text-lg font-light leading-relaxed mb-8">
-              Hey, I’m an IIT Madras student who got way too interested in editing and decided to make something out of it. With 1.5+ years of experience, I’ve been playing around with cuts, transitions, effects, and visuals to turn raw footage into something people actually want to watch. I work with CapCut and After Effects, and I’m always experimenting with new styles and ways to make my edits better.
-            </p>
-
-            {/* Quick Feature Badges */}
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 pt-6 border-t border-zinc-900 font-mono text-xs">
-              <div className="bg-black/50 border border-zinc-800/80 p-4 rounded-xl">
-                <span className="text-zinc-500 text-[10px] block uppercase tracking-wider mb-1">Education</span>
-                <span className="text-white font-bold text-sm">IIT Madras</span>
-              </div>
-              <div className="bg-black/50 border border-zinc-800/80 p-4 rounded-xl">
-                <span className="text-zinc-500 text-[10px] block uppercase tracking-wider mb-1">Experience</span>
-                <span className="text-white font-bold text-sm">1.5+ Years</span>
-              </div>
-              <div className="bg-black/50 border border-zinc-800/80 p-4 rounded-xl">
-                <span className="text-zinc-500 text-[10px] block uppercase tracking-wider mb-1">Primary Tools</span>
-                <span className="text-white font-bold text-sm">After Effects</span>
-              </div>
-              <div className="bg-black/50 border border-zinc-800/80 p-4 rounded-xl">
-                <span className="text-zinc-500 text-[10px] block uppercase tracking-wider mb-1">Mobile &amp; Fast</span>
-                <span className="text-white font-bold text-sm">CapCut</span>
-              </div>
-            </div>
-          </div>
-        </div>
+      {/* Hero 3D Sphere Section */}
+      <section id="hero" className="w-full min-h-[70vh] sm:h-screen relative bg-black overflow-hidden">
+        <SphereGallery />
       </section>
 
       {/* Main Showcase Section */}
@@ -85,6 +46,43 @@ export default function Home() {
 
         {/* Endless Horizontal Carousel */}
         <Carousel onSelect={handleSelect} />
+      </section>
+
+      {/* About Me Section moved after work */}
+      <section id="about" className="max-w-7xl mx-auto px-6 py-12 z-10 w-full">
+        <div className="bg-zinc-950/80 border border-zinc-900 rounded-2xl p-8 md:p-12 shadow-2xl backdrop-blur-sm relative overflow-hidden">
+          <div className="absolute top-0 left-0 w-full h-[2px] bg-gradient-to-r from-red-600 via-red-500 to-transparent" />
+          <div className="max-w-3xl">
+            <span className="inline-block px-3.5 py-1 bg-red-950/60 border border-red-800/40 text-red-400 text-[11px] uppercase font-mono tracking-widest rounded-full mb-4 font-semibold">
+              About Me
+            </span>
+            <h2 className="text-3xl md:text-5xl font-black tracking-tight text-white uppercase mb-6 leading-tight">
+              IIT Madras Student &amp; <br />
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-red-500 to-red-600">Visual Editor</span>
+            </h2>
+            <p className="text-zinc-300 text-base md:text-lg font-light leading-relaxed mb-8">
+              Hey, I’m an IIT Madras student who got way too interested in editing and decided to make something out of it. With 1.5+ years of experience, I’ve been playing around with cuts, transitions, effects, and visuals to turn raw footage into something people actually want to watch. I work with CapCut and After Effects, and I’m always experimenting with new styles and ways to make my edits better.
+            </p>
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 pt-6 border-t border-zinc-900 font-mono text-xs">
+              <div className="bg-black/50 border border-zinc-800/80 p-4 rounded-xl">
+                <span className="text-zinc-500 text-[10px] block uppercase tracking-wider mb-1">Education</span>
+                <span className="text-white font-bold text-sm">IIT Madras</span>
+              </div>
+              <div className="bg-black/50 border border-zinc-800/80 p-4 rounded-xl">
+                <span className="text-zinc-500 text-[10px] block uppercase tracking-wider mb-1">Experience</span>
+                <span className="text-white font-bold text-sm">1.5+ Years</span>
+              </div>
+              <div className="bg-black/50 border border-zinc-800/80 p-4 rounded-xl">
+                <span className="text-zinc-500 text-[10px] block uppercase tracking-wider mb-1">Primary Tools</span>
+                <span className="text-white font-bold text-sm">After Effects</span>
+              </div>
+              <div className="bg-black/50 border border-zinc-800/80 p-4 rounded-xl">
+                <span className="text-zinc-500 text-[10px] block uppercase tracking-wider mb-1">Mobile &amp; Fast</span>
+                <span className="text-white font-bold text-sm">CapCut</span>
+              </div>
+            </div>
+          </div>
+        </div>
       </section>
 
       {/* Sleek Side Drawer Video Player Overlay */}

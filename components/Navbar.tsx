@@ -30,7 +30,7 @@ export default function Navbar() {
         </Link>
 
         <nav className="flex items-center gap-6 text-xs uppercase tracking-widest text-zinc-400 font-mono">
-          <Link href="/" className="hover:text-white transition">ABOUT ME</Link>
+          <a href="#about" className="hover:text-white transition">ABOUT ME</a>
           <Link href="/gallery" className="hover:text-white transition">WORK</Link>
           <button
             onClick={() => setShowContactModal(true)}

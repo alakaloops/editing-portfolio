@@ -470,10 +470,32 @@ export default function SphereGallery() {
 
     // 7. Animation Loop
     let animId: number;
+let isCanvasVisible = true;
+// IntersectionObserver to pause rendering when the canvas scrolls out of view
+const visibilityObserver = new IntersectionObserver((entries) => {
+  entries.forEach((entry) => {
+    isCanvasVisible = entry.isIntersecting;
+    if (!isCanvasVisible) {
+      cancelAnimationFrame(animId);
+    } else {
+      animate();
+    }
+  });
+}, { root: null, threshold: 0.1 });
+visibilityObserver.observe(container);
+// Pause rendering when the tab is hidden
+document.addEventListener('visibilitychange', () => {
+  if (document.hidden) {
+    cancelAnimationFrame(animId);
+  } else if (isCanvasVisible) {
+    animate();
+  }
+});
     const animate = () => {
       animId = requestAnimationFrame(animate);
 
-      controls.update();
+      if (!isCanvasVisible) return;
+controls.update();
 
       // Billboarding: Plane meshes always look at the camera
       meshes.forEach((mesh) => {
