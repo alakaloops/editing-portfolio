@@ -246,8 +246,8 @@ export default function SphereGallery() {
     const camera = new THREE.PerspectiveCamera(55, width / height, 0.1, 1000);
     camera.position.z = 18;
 
-    const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: false });
-    renderer.setClearColor(0x000000, 1);
+    const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+    renderer.setClearColor(0x000000, 0);
     renderer.setSize(width, height);
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
     container.appendChild(renderer.domElement);
@@ -352,7 +352,7 @@ export default function SphereGallery() {
     let isDragging = false;
     let driftFactor = 1.0;
     let autoRotateFactor = 1.0;
-    const clock = new THREE.Clock();
+    const startTime = performance.now();
 
     // Mouse tracking for subtle parallax cursor-follow tilt
     let mouseX = 0;
@@ -524,7 +524,7 @@ controls.update();
         sphereGroup.rotation.y += deltaTiltY; // Add Y cursor tilt offset
 
         // Idle Auto-Drift (Lissajous Path) - UNTOUCHED
-        const t = clock.getElapsedTime();
+        const t = (performance.now() - startTime) / 1000;
         const driftRangeX = 1.2;
         const driftRangeY = 0.8;
         sphereGroup.position.x = Math.sin(t * 0.15) * driftRangeX * driftFactor;

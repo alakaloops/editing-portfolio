@@ -84,10 +84,26 @@ export const mediaItems: MediaItem[] = [
   },
 ];
 
+interface LoopConfig {
+  repeat?: number;
+  paused?: boolean;
+  speed?: number;
+  snap?: number | false | ((value: number) => number);
+  paddingRight?: number;
+  reversed?: boolean;
+  onChange?: (item: HTMLElement, index: number) => void;
+}
+
+export type LoopTimeline = gsap.core.Timeline & {
+  toIndex?: (index: number, vars?: gsap.TweenVars) => gsap.core.Tween;
+  times?: number[];
+  closestIndex?: () => number;
+};
+
 /* =========================================================================
    OFFICIAL GSAP horizontalLoop HELPER PATTERN
    ========================================================================= */
-function horizontalLoop(items: HTMLElement[], config: any = {}) {
+function horizontalLoop(items: HTMLElement[], config: LoopConfig = {}) {
   const elements = gsap.utils.toArray(items) as HTMLElement[];
   if (!elements.length) return null;
 
@@ -100,13 +116,13 @@ function horizontalLoop(items: HTMLElement[], config: any = {}) {
     onUpdate:
       onChange &&
       function () {
-        const i = (tl as any).closestIndex();
+        const i = (tl as LoopTimeline).closestIndex?.() ?? 0;
         if (lastIndex !== i) {
           lastIndex = i;
           onChange(elements[i], i);
         }
       },
-  });
+  }) as LoopTimeline;
 
   const length = elements.length;
   const startX = elements[0].offsetLeft;
@@ -116,7 +132,7 @@ function horizontalLoop(items: HTMLElement[], config: any = {}) {
   const xPercents: number[] = [];
   let curIndex = 0;
   const pixelsPerSecond = (config.speed || 1) * 35; // ~35px/sec slow drift
-  const snap = config.snap === false ? (v: number) => v : gsap.utils.snap(config.snap || 1);
+  const snap = config.snap === false ? (v: number) => v : gsap.utils.snap((config.snap as number) || 1);
 
   const populateWidths = () => {
     const b1 = elements[0].getBoundingClientRect();
@@ -175,11 +191,11 @@ function horizontalLoop(items: HTMLElement[], config: any = {}) {
     times[i] = distanceToStart / pixelsPerSecond;
   }
 
-  (tl as any).toIndex = (index: number, vars: any) => toIndex(index, vars);
-  (tl as any).times = times;
+  tl.toIndex = (index: number, vars: gsap.TweenVars = {}) => toIndex(index, vars);
+  tl.times = times;
   tl.progress(1, true).progress(0, true);
 
-  function toIndex(index: number, vars: any = {}) {
+  function toIndex(index: number, vars: gsap.TweenVars = {}) {
     if (Math.abs(index - curIndex) > length / 2) {
       index += index > curIndex ? -length : length;
     }
@@ -203,7 +219,7 @@ export default function Carousel({ onSelect }: { onSelect: (item: MediaItem) => 
   const containerRef = useRef<HTMLDivElement>(null);
   const trackRef = useRef<HTMLDivElement>(null);
   const flashRef = useRef<HTMLDivElement>(null);
-  const autoDriftTlRef = useRef<any>(null);
+  const autoDriftTlRef = useRef<LoopTimeline | null>(null);
   const [isDragging, setIsDragging] = useState(false);
   const videoRefs = useRef<{ [key: string]: HTMLVideoElement | null }>({});
 
