@@ -5,7 +5,16 @@ import { LinkedInIcon } from './SocialIcons';
 export default function Footer() {
   return (
     <footer id="contact" className="w-full max-w-7xl mx-auto px-6 py-8 border-t border-zinc-900/80 flex flex-col sm:flex-row justify-between items-center gap-6 text-xs font-mono text-zinc-500 z-10 relative">
-      <div>© {new Date().getFullYear()} ALAKA EDITS. ALL RIGHTS RESERVED.</div>
+      <div className="flex items-center gap-3">
+        <span>© {new Date().getFullYear()} ALAKA EDITS. ALL RIGHTS RESERVED.</span>
+        <a
+          href="/admin"
+          className="text-zinc-600 hover:text-red-500 transition text-[11px] font-mono tracking-wider"
+          title="Open Admin Panel"
+        >
+          [ADMIN]
+        </a>
+      </div>
       <div className="flex flex-wrap items-center gap-2 sm:gap-6">
         <a
           href="https://www.instagram.com/dash_alaka_?stkn=NTFqaDZjMDU5ZmN6"

@@ -221,13 +221,44 @@ export default function Carousel({ onSelect }: { onSelect: (item: MediaItem) => 
   const flashRef = useRef<HTMLDivElement>(null);
   const autoDriftTlRef = useRef<LoopTimeline | null>(null);
   const [isDragging, setIsDragging] = useState(false);
+  const [items, setItems] = useState<MediaItem[]>(mediaItems);
   const videoRefs = useRef<{ [key: string]: HTMLVideoElement | null }>({});
 
+  // 1. Fetch Dynamic Edits from API (with fallback to default mediaItems)
   useEffect(() => {
-    // 1. Register GSAP Plugins
-    gsap.registerPlugin(Draggable);
+    let isMounted = true;
+    const fetchLatestEdits = async () => {
+      try {
+        const res = await fetch('/api/edits');
+        if (res.ok) {
+          const data = await res.json();
+          if (Array.isArray(data) && data.length > 0 && isMounted) {
+            setItems(data);
+          }
+        }
+      } catch {
+        // Fallback to static mediaItems
+      }
+    };
 
-    // 2. White Flash Intro on Page Load
+    fetchLatestEdits();
+
+    const handleEditsUpdated = () => {
+      fetchLatestEdits();
+    };
+
+    window.addEventListener('edits-updated', handleEditsUpdated);
+    window.addEventListener('storage', handleEditsUpdated);
+
+    return () => {
+      isMounted = false;
+      window.removeEventListener('edits-updated', handleEditsUpdated);
+      window.removeEventListener('storage', handleEditsUpdated);
+    };
+  }, []);
+
+  // 2. White Flash Intro on Page Load (Once)
+  useEffect(() => {
     if (flashRef.current) {
       gsap.timeline()
         .to(flashRef.current, {
@@ -253,74 +284,91 @@ export default function Carousel({ onSelect }: { onSelect: (item: MediaItem) => 
         );
       }
     }
+  }, []);
 
-    // 3. Continuous Horizontal Auto-Drift using GSAP horizontalLoop Helper
-    if (trackRef.current) {
-      const cards = Array.from(trackRef.current.children) as HTMLElement[];
-      const autoDriftTl = horizontalLoop(cards, {
-        speed: 1.0, // ~35px/sec constant drift speed
-        repeat: -1,
-        paused: false,
+  // 3. Continuous Horizontal Auto-Drift & Drag for Items
+  useEffect(() => {
+    gsap.registerPlugin(Draggable);
+
+    if (!trackRef.current) return;
+    const cards = Array.from(trackRef.current.children) as HTMLElement[];
+    if (cards.length === 0) return;
+
+    // Clean up previous timeline and draggable instances
+    const triggerEl = containerRef.current;
+    if (autoDriftTlRef.current) {
+      autoDriftTlRef.current.kill();
+      autoDriftTlRef.current = null;
+    }
+    if (triggerEl) {
+      Draggable.get(triggerEl)?.kill();
+    }
+
+    const autoDriftTl = horizontalLoop(cards, {
+      speed: 1.0, // ~35px/sec constant drift speed
+      repeat: -1,
+      paused: false,
+    });
+
+    autoDriftTlRef.current = autoDriftTl;
+
+    // Manual Drag with Velocity-Based Momentum
+    if (triggerEl && autoDriftTl) {
+      let startX = 0;
+      let lastDragX = 0;
+      let lastTime = 0;
+      let dragVelocity = 0;
+
+      Draggable.create(triggerEl, {
+        type: 'x',
+        onDragStart() {
+          autoDriftTl.pause();
+          startX = this.x;
+          lastDragX = this.x;
+          lastTime = performance.now();
+          dragVelocity = 0;
+          setIsDragging(false);
+        },
+        onDrag() {
+          const now = performance.now();
+          const dt = now - lastTime || 16;
+          const dx = this.x - lastDragX;
+          dragVelocity = dx / dt; // px/ms
+          lastDragX = this.x;
+          lastTime = now;
+
+          if (Math.abs(this.x - startX) > 5) {
+            setIsDragging(true);
+          }
+        },
+        onDragEnd() {
+          // Velocity-based release momentum simulation
+          const momentumX = dragVelocity * 300;
+          gsap.to(trackRef.current, {
+            x: `+=${momentumX}`,
+            duration: 0.8,
+            ease: 'power2.out',
+            onComplete: () => {
+              if (autoDriftTlRef.current) {
+                autoDriftTlRef.current.play();
+                gsap.to(autoDriftTlRef.current, { timeScale: 1, duration: 0.5, ease: 'power2.out' });
+              }
+            },
+          });
+          setTimeout(() => setIsDragging(false), 50);
+        },
       });
-
-      autoDriftTlRef.current = autoDriftTl;
-
-      // 4. Manual Drag with Velocity-Based Momentum
-      const triggerEl = containerRef.current;
-      if (triggerEl && autoDriftTl) {
-        let startX = 0;
-        let lastDragX = 0;
-        let lastTime = 0;
-        let dragVelocity = 0;
-
-        Draggable.create(triggerEl, {
-          type: 'x',
-          onDragStart() {
-            autoDriftTl.pause();
-            startX = this.x;
-            lastDragX = this.x;
-            lastTime = performance.now();
-            dragVelocity = 0;
-            setIsDragging(false);
-          },
-          onDrag() {
-            const now = performance.now();
-            const dt = now - lastTime || 16;
-            const dx = this.x - lastDragX;
-            dragVelocity = dx / dt; // px/ms
-            lastDragX = this.x;
-            lastTime = now;
-
-            if (Math.abs(this.x - startX) > 5) {
-              setIsDragging(true);
-            }
-          },
-          onDragEnd() {
-            // Velocity-based release momentum simulation
-            const momentumX = dragVelocity * 300;
-            gsap.to(trackRef.current, {
-              x: `+=${momentumX}`,
-              duration: 0.8,
-              ease: 'power2.out',
-              onComplete: () => {
-                if (autoDriftTlRef.current) {
-                  autoDriftTlRef.current.play();
-                  gsap.to(autoDriftTlRef.current, { timeScale: 1, duration: 0.5, ease: 'power2.out' });
-                }
-              },
-            });
-            setTimeout(() => setIsDragging(false), 50);
-          },
-        });
-      }
     }
 
     return () => {
       if (autoDriftTlRef.current) {
         autoDriftTlRef.current.kill();
       }
+      if (triggerEl) {
+        Draggable.get(triggerEl)?.kill();
+      }
     };
-  }, []);
+  }, [items]);
 
   // 5. Hover Pause on Auto-Drift (Ramp timeScale to ~0.15 on hover, back to 1 on leave)
   const handleCarouselMouseEnter = () => {
@@ -404,7 +452,7 @@ export default function Carousel({ onSelect }: { onSelect: (item: MediaItem) => 
         onMouseLeave={handleCarouselMouseLeave}
       >
         <div className={styles.track} ref={trackRef}>
-          {mediaItems.map((item) => (
+          {items.map((item) => (
             <div
               key={item.id}
               className={`${styles.card} ${item.isPlaceholder ? styles.cardPlaceholder : ''}`}

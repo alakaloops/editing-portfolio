@@ -1,0 +1,58 @@
+[
+  {
+    "id": "5",
+    "title": "Visual Edit 05",
+    "category": "After Effects / VFX",
+    "thumbnail": "/thumbnails/edit5.jpg",
+    "src": "/videos/edit5.mp4",
+    "duration": "0:30"
+  },
+  {
+    "id": "6",
+    "title": "Visual Edit 06",
+    "category": "Cinematic Motion",
+    "thumbnail": "/thumbnails/edit6.jpg",
+    "src": "/videos/edit6.mp4",
+    "duration": "0:45"
+  },
+  {
+    "id": "7",
+    "title": "Visual Edit 07",
+    "category": "Rhythm & Color",
+    "thumbnail": "/thumbnails/edit7.jpg",
+    "src": "/videos/edit7.mp4",
+    "duration": "0:40"
+  },
+  {
+    "id": "8",
+    "title": "Visual Edit 08",
+    "category": "CapCut / Dynamics",
+    "thumbnail": "/thumbnails/edit8.jpg",
+    "src": "/videos/edit8.mp4",
+    "duration": "0:35"
+  },
+  {
+    "id": "10",
+    "title": "Visual Edit 10",
+    "category": "Visual Composition",
+    "thumbnail": "/thumbnails/edit10.jpg",
+    "src": "/videos/edit10.mp4",
+    "duration": "0:50"
+  },
+  {
+    "id": "11",
+    "title": "Visual Edit 11",
+    "category": "VFX Showcase",
+    "thumbnail": "/thumbnails/edit11.jpeg",
+    "src": "/videos/edit11.mp4",
+    "duration": "1:05"
+  },
+  {
+    "id": "12",
+    "title": "Visual Edit 12",
+    "category": "High-Energy Edit",
+    "thumbnail": "/thumbnails/edit12.jpeg",
+    "src": "/videos/edit12.mp4",
+    "duration": "0:25"
+  }
+]
